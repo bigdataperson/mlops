@@ -38,14 +38,14 @@ if [[ "$option" == "nowait" ]]; then
 fi
 
 # Monitor the job status
-status=$(az ml job show -n "$run_id" --query status -o tsv)
+status=$(az ml job show -n "$run_id" --resource-group "subri-ai-rg" --workspace-name "subri-ai-ml" --query status -o tsv)
 if [[ -z "$status" ]]; then
   echo "Failed to retrieve job status."
   exit 4
 fi
 
 # Retrieve the job URI
-job_uri=$(az ml job show -n "$run_id" --query services.Studio.endpoint)
+job_uri=$(az ml job show -n "$run_id" --resource-group "subri-ai-rg" --workspace-name "subri-ai-ml" --query services.Studio.endpoint)
 if [[ -z "$job_uri" ]]; then
   echo "Failed to retrieve job URI."
   exit 5
@@ -59,7 +59,7 @@ while [[ " ${running[@]} " =~ " ${status} " ]]; do
   echo "Job Status: $status"
   echo "Job URI: $job_uri"
   sleep 8
-  status=$(az ml job show -n "$run_id" --query status -o tsv)
+  status=$(az ml job show -n "$run_id" --resource-group "subri-ai-rg" --workspace-name "subri-ai-ml" --query status -o tsv)
   if [[ -z "$status" ]]; then
     echo "Failed to retrieve job status."
     exit 4
